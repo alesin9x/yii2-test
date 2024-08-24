@@ -87,7 +87,7 @@ class ParametersController extends Controller
 
     private function _saveImages($parameter)
     {
-        if ($parameter->load(Yii::$app->request->post())) {
+        if ($parameter->load(Yii::$app->request->post()) || $parameter->type == 2) {
             $imagesWeCanSave = [
                 ['attribute' => 'FileIcon', 'tableFieldUrl' => 'icon', 'tableFieldOriginalName' => 'icon_original_name'],
                 ['attribute' => 'FileIconGray', 'tableFieldUrl' => 'icon_gray', 'tableFieldOriginalName' => 'icon_gray_original_name'],
