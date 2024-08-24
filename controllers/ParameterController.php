@@ -4,11 +4,9 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Parameter;
-use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\UploadedFile;
-use yii\web\NotFoundHttpException;
-use app\components\Transliterator;
+use app\helpers\Translit;
 
 class ParametersController extends Controller
 {
@@ -113,7 +111,7 @@ class ParametersController extends Controller
 
     private function _saveImageAsFile($image): string | null
     {
-        $imageNameOriginal = $image->name;
+        $imageNameOriginal = Translit::translit($image->name);
         $imagePath = Yii::getAlias('@webroot/uploads/') . $imageNameOriginal . '.' . $image->extension;
         // Баг который был на ларавел решен так
         while (file_exists($imagePath)) {
