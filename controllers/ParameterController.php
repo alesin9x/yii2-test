@@ -40,8 +40,8 @@ class ParametersController extends Controller
     public function actionDeleteImage($parameterId, $imageType)
     {
         $imagesWeCanDelete = [
-            'icon' => ['fieldIcon' => 'icon', 'fieldIconOGName' => 'icon_original_name'],
-            'icon_gray' => ['attribute' => 'icon_gray', 'fieldIconOGName' => 'icon_gray_original_name'],
+            'icon' => ['fieldIcon' => 'icon', 'fieldIconOGName' => 'icon_original_name', 'url_function' => 'getIconUrl'],
+            'icon_gray' => ['attribute' => 'icon_gray', 'fieldIconOGName' => 'icon_gray_original_name', 'url_function' => 'getIconGrayUrl'],
         ];
         if(empty($type = $imagesWeCanDelete[$imageType])) {
             throw new Error('Неизвестный тип изображения');
@@ -50,7 +50,7 @@ class ParametersController extends Controller
         $parameter = $this->findParameterById($parameterId);
         $parameter->{$type['fieldIcon']} = null;
         $parameter->{$type['fieldIconOGName']} = null;
-        // TODO удалить изображение с сервера
+        unlink($parameter->{$type['url_function']}());
         $parameter->save();
         return $this->redirect(['update', 'id' => $parameterId]);
     }
