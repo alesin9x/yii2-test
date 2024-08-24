@@ -18,6 +18,14 @@ class ParametersController extends Controller
         return $parameter;
     }
 
+    public function actionIndex()
+    {
+        $queryParameter = new app\models\ParameterSearch();
+        $dataProvider = $queryParameter->search(Yii::$app->request->queryParams);
+
+        return $this->render('index', compact('dataProvider', 'queryParameter'));
+    }
+
     // Возможность добавить одно или два изображения к параметру.
     public function actionCreate()
     {
