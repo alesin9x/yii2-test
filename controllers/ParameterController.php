@@ -57,6 +57,35 @@ class ParametersController extends Controller
         return $this->redirect(['update', 'id' => $parameterId]);
     }
 
+    // Реализовать API в котором можно получить все параметры к которым можно подгрузить картинки со списком подгруженных картинок в формате json. Список подгруженных картинок должен иметь исходное имя, путь для просмотра картинок и отметку для понимания что есть icon, а что icon_gray.
+
+    public function actionApiIconsIndex()
+    {
+        $parameters = Parameter::find()->where(['type' => 2])->all();
+
+        $res = array_reduce($parameters, function($res, $parameter) {
+            return [
+                ...$res,
+              [
+                  'ID' => $parameter->ID,
+                  'title' => $parameter->title,
+                  'icon_info' => $parameter->icon ? [
+                      'original_name' => $parameter->icon_original_name,
+                      'url' => $parameter->getIconUrl()
+                  ] : [],
+                  'icon_gray_info' => $parameter->icon_gray ? [
+                      'original_name' => $parameter->icon_gray_original_name,
+                      'url' => $parameter->getIconGrayUrl()
+                  ] : [],
+              ]
+            ];
+
+        }, []);
+
+        return $this->asJson($res);
+
+    }
+
 
     private function _saveImages($parameter)
     {
