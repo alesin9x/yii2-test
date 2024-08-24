@@ -39,6 +39,24 @@ class ParametersController extends Controller
         return $this->render('update', compact('parameter'));
     }
 
+    public function actionDeleteImage($parameterId, $imageType)
+    {
+        $imagesWeCanDelete = [
+            'icon' => ['fieldIcon' => 'icon', 'fieldIconOGName' => 'icon_original_name'],
+            'icon_gray' => ['attribute' => 'icon_gray', 'fieldIconOGName' => 'icon_gray_original_name'],
+        ];
+        if(empty($type = $imagesWeCanDelete[$imageType])) {
+            throw new Error('Неизвестный тип изображения');
+        }
+
+        $parameter = $this->findParameterById($parameterId);
+        $parameter->{$type['fieldIcon']} = null;
+        $parameter->{$type['fieldIconOGName']} = null;
+        // TODO удалить изображение с сервера
+        $parameter->save();
+        return $this->redirect(['update', 'id' => $parameterId]);
+    }
+
 
     private function _saveImages($parameter)
     {
