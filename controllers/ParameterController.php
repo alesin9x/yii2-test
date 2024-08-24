@@ -25,6 +25,23 @@ class ParametersController extends Controller
     {
         $parameter = new Parameter();
 
+        $this->_saveImages($parameter);
+
+        return $this->render('create', compact('parameter'));
+    }
+
+    // Возможность заменить загруженные изображения на другие.
+    public function actionUpdate($id)
+    {
+        $parameter = $this->findParameterById($id);
+        $this->_saveImages($parameter);
+
+        return $this->render('update', compact('parameter'));
+    }
+
+
+    private function _saveImages($parameter)
+    {
         if ($parameter->load(Yii::$app->request->post())) {
             $imagesWeCanSave = [
                 ['attribute' => 'FileIcon', 'tableFieldUrl' => 'icon', 'tableFieldOriginalName' => 'icon_original_name'],
@@ -43,8 +60,8 @@ class ParametersController extends Controller
                 return $this->redirect(['index']);
             }
         }
+        return null;
 
-        return $this->render('create', compact('parameter'));
     }
 
     private function _saveImageAsFile($image): string | null
