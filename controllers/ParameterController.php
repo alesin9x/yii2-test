@@ -8,7 +8,7 @@ use yii\web\Controller;
 use yii\web\UploadedFile;
 use app\helpers\Translit;
 
-class ParametersController extends Controller
+class ParameterController extends Controller
 {
     private function findParameterById($id)
     {
