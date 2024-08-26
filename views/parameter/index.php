@@ -35,7 +35,15 @@ $this->title = 'Parameters';
                         return $model->icon_gray ? Html::img($model->icon_gray, ['width' => '50']) : null;
                     }
                 ],
-                'icon_gray_original_name'
+                'icon_gray_original_name',
+                [
+                    'attribute' => 'Ссылка',
+                    'format' => 'html',
+                    'value' => function ($model) {
+                        return Html::a('Перейти', ['update', 'ID' => $model->ID], ['class' => 'btn btn-primary']);
+                    }
+
+                ]
             ]
         ])
         ?>

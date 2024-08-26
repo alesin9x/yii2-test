@@ -36,9 +36,9 @@ class ParameterController extends Controller
     }
 
     // Возможность заменить загруженные изображения на другие.
-    public function actionUpdate($id)
+    public function actionUpdate($ID)
     {
-        $parameter = $this->findParameterById($id);
+        $parameter = $this->findParameterById($ID);
         $this->_saveImages($parameter);
 
         return $this->render('update', compact('parameter'));
