@@ -24,21 +24,4 @@ class Parameter extends ActiveRecord
         ];
     }
 
-    private function _getIcon($type = 'icon')
-    {
-        if(!$this->$type) return null;
-        return Yii::$app->request->baseUrl . '/uploads/' . $this->$type;
-    }
-
-    public function getIconUrl()
-    {
-        return $this->_getIcon();
-    }
-
-    public function getIconGrayUrl()
-    {
-        return $this->_getIcon('icon_gray');
-    }
-
-
 }

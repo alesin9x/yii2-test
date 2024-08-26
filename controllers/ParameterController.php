@@ -56,18 +56,20 @@ class ParameterController extends Controller
     {
         $imagesWeCanDelete = [
             'icon' => ['fieldIcon' => 'icon', 'fieldIconOGName' => 'icon_original_name'],
-            'icon_gray' => ['attribute' => 'icon_gray', 'fieldIconOGName' => 'icon_gray_original_name'],
+            'icon_gray' => ['fieldIcon' => 'icon_gray', 'fieldIconOGName' => 'icon_gray_original_name'],
         ];
         if(empty($type = $imagesWeCanDelete[$imageType])) {
             throw new Error('Неизвестный тип изображения');
         }
-
         $parameter = $this->findParameterById($parameterId);
+        $iconPath = $parameter->{$type['fieldIcon']};
         $parameter->{$type['fieldIcon']} = null;
         $parameter->{$type['fieldIconOGName']} = null;
-        unlink($parameter->{$type['fieldIcon']});
-        $parameter->save();
-        return $this->redirect(['update', 'id' => $parameterId]);
+        if($parameter->save()){
+            unlink($iconPath);
+        }
+
+        return $this->redirect(['update', 'ID' => $parameterId]);
     }
 
     // Реализовать API в котором можно получить все параметры к которым можно подгрузить картинки со списком подгруженных картинок в формате json. Список подгруженных картинок должен иметь исходное имя, путь для просмотра картинок и отметку для понимания что есть icon, а что icon_gray.
