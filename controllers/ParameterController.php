@@ -30,7 +30,6 @@ class ParameterController extends Controller
     public function actionCreate()
     {
         $parameter = new Parameter();
-
         $this->_saveImages($parameter);
 
         return $this->render('create', compact('parameter'));
@@ -95,24 +94,27 @@ class ParameterController extends Controller
 
     private function _saveImages($parameter)
     {
-        if ($parameter->load(Yii::$app->request->post()) || $parameter->type == 2) {
-            $imagesWeCanSave = [
-                ['attribute' => 'FileIcon', 'tableFieldUrl' => 'icon', 'tableFieldOriginalName' => 'icon_original_name'],
-                ['attribute' => 'FileIconGray', 'tableFieldUrl' => 'icon_gray', 'tableFieldOriginalName' => 'icon_gray_original_name'],
-            ];
+        if ($parameter->load(Yii::$app->request->post())) {
+            if($parameter->type == 2){
+                $imagesWeCanSave = [
+                    ['attribute' => 'FILEIcon', 'tableFieldUrl' => 'icon', 'tableFieldOriginalName' => 'icon_original_name'],
+                    ['attribute' => 'FILEIconGray', 'tableFieldUrl' => 'icon_gray', 'tableFieldOriginalName' => 'icon_gray_original_name'],
+                ];
 
-            foreach ($imagesWeCanSave as $image) {
-                $icon = UploadedFile::getInstance($parameter, $image['attribute']);
-                if ($icon) {
-                    $parameter->{$image['tableFieldUrl']} = $this->_saveImageAsFile($icon);
-                    $parameter->{$image['tableFieldOriginalName']} = $icon->name;
+                foreach ($imagesWeCanSave as $image) {
+                    $icon = UploadedFile::getInstance($parameter, $image['attribute']);
+                    if ($icon) {
+                        $parameter->{$image['tableFieldUrl']} = $this->_saveImageAsFile($icon);
+                        $parameter->{$image['tableFieldOriginalName']} = $icon->name;
+                    }
                 }
             }
-
             if ($parameter->save()) {
                 return $this->redirect(['index']);
             }
+
         }
+
         return null;
 
     }
