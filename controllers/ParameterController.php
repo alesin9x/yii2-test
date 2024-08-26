@@ -121,12 +121,12 @@ class ParameterController extends Controller
 
     private function _saveImageAsFile($image): string | null
     {
-        $imageNameOriginal = Translit::translit($image->baseName);
-        $imagePath = Yii::getAlias('@webroot/uploads/') . $imageNameOriginal . '.' . $image->extension;
+        $imageName = $imageNameOriginal = Translit::translit($image->baseName);
+        $imagePath = 'uploads/' . $imageName . '.' . $image->extension;
         // Баг который был на ларавел решен так
         while (file_exists($imagePath)) {
             $imageName = $imageNameOriginal . time();
-            $imagePath = Yii::getAlias('@webroot/uploads/') . $imageName . '.' . $image->extension;
+            $imagePath = 'uploads/' . $imageName . '.' . $image->extension;
         }
 
 
