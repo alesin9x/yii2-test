@@ -32,6 +32,10 @@ class ParameterController extends Controller
         $parameter = new Parameter();
         $this->_saveImages($parameter);
 
+        if ($parameter->save()) {
+            return $this->redirect(['index']);
+        }
+
         return $this->render('create', compact('parameter'));
     }
 
@@ -41,14 +45,18 @@ class ParameterController extends Controller
         $parameter = $this->findParameterById($ID);
         $this->_saveImages($parameter);
 
+        if ($parameter->save()) {
+            return $this->render('update', compact('parameter'));
+        }
+
         return $this->render('update', compact('parameter'));
     }
 
-    public function actionDeleteImage($parameterId, $imageType)
+    public function actionDeleteimage($parameterId, $imageType)
     {
         $imagesWeCanDelete = [
-            'icon' => ['fieldIcon' => 'icon', 'fieldIconOGName' => 'icon_original_name', 'url_function' => 'getIconUrl'],
-            'icon_gray' => ['attribute' => 'icon_gray', 'fieldIconOGName' => 'icon_gray_original_name', 'url_function' => 'getIconGrayUrl'],
+            'icon' => ['fieldIcon' => 'icon', 'fieldIconOGName' => 'icon_original_name'],
+            'icon_gray' => ['attribute' => 'icon_gray', 'fieldIconOGName' => 'icon_gray_original_name'],
         ];
         if(empty($type = $imagesWeCanDelete[$imageType])) {
             throw new Error('Неизвестный тип изображения');
@@ -57,7 +65,7 @@ class ParameterController extends Controller
         $parameter = $this->findParameterById($parameterId);
         $parameter->{$type['fieldIcon']} = null;
         $parameter->{$type['fieldIconOGName']} = null;
-        unlink($parameter->{$type['url_function']}());
+        unlink($parameter->{$type['fieldIcon']});
         $parameter->save();
         return $this->redirect(['update', 'id' => $parameterId]);
     }
@@ -109,10 +117,6 @@ class ParameterController extends Controller
                     }
                 }
             }
-            if ($parameter->save()) {
-                return $this->redirect(['index']);
-            }
-
         }
 
         return null;
