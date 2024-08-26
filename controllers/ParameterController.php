@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Parameter;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\UploadedFile;
 use app\helpers\Translit;
@@ -74,11 +75,12 @@ class ParameterController extends Controller
 
     // Реализовать API в котором можно получить все параметры к которым можно подгрузить картинки со списком подгруженных картинок в формате json. Список подгруженных картинок должен иметь исходное имя, путь для просмотра картинок и отметку для понимания что есть icon, а что icon_gray.
 
-    public function actionApiIconsIndex()
+    public function actionApiiconsindex()
     {
         $parameters = Parameter::find()->where(['type' => 2])->all();
 
-        $res = array_reduce($parameters, function($res, $parameter) {
+        $url = Url::base('https') . '/';
+        $res = array_reduce($parameters, function($res, $parameter) use($url) {
             return [
                 ...$res,
               [
@@ -86,17 +88,16 @@ class ParameterController extends Controller
                   'title' => $parameter->title,
                   'icon_info' => $parameter->icon ? [
                       'original_name' => $parameter->icon_original_name,
-                      'url' => $parameter->getIconUrl()
+                      'url' => $url . $parameter->icon,
                   ] : [],
                   'icon_gray_info' => $parameter->icon_gray ? [
                       'original_name' => $parameter->icon_gray_original_name,
-                      'url' => $parameter->getIconGrayUrl()
+                      'url' => $url . $parameter->icon_gray,
                   ] : [],
               ]
             ];
 
         }, []);
-
         return $this->asJson($res);
 
     }
