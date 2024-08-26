@@ -9,7 +9,7 @@ class ParameterSearch extends Parameter
     public function rules()
     {
         return [
-            [['id'], 'integer'],
+            [['ID'], 'integer'],
             [['title'], 'string'],
         ];
     }
@@ -28,7 +28,7 @@ class ParameterSearch extends Parameter
             return $filtereData;
         }
 
-        $query->andFilterWhere(['id' => $this->id])
+        $query->andFilterWhere(['ID' => $this->ID])
             ->andFilterWhere(['like', 'title', $this->title]);
 
         return $filtereData;

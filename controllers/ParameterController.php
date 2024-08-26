@@ -20,7 +20,7 @@ class ParameterController extends Controller
 
     public function actionIndex()
     {
-        $queryParameter = new app\models\ParameterSearch();
+        $queryParameter = new \app\models\ParameterSearch();
         $dataProvider = $queryParameter->search(Yii::$app->request->queryParams);
 
         return $this->render('index', compact('dataProvider', 'queryParameter'));

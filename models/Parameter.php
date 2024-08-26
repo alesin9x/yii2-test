@@ -21,7 +21,7 @@ class Parameter extends ActiveRecord
             [['title', 'type'], 'required'],
             [['type'], 'integer'],
             [['title', 'icon', 'icon_gray', 'icon_original_name', 'icon_gray_original_name'], 'string', 'max' => 255],
-            [['icon_file', 'icon_gray_file'], 'file', 'skipOnEmpty' => true, 'extensions' => 'jpg, jpeg, png'],
+            [['icon_file', 'icon_gray_file'], 'when' => fn($model) => $model->type == 2,'file', 'skipOnEmpty' => true, 'extensions' => 'jpg, jpeg, png'],
         ];
     }
 
