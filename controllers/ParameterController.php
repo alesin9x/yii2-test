@@ -122,6 +122,9 @@ class ParameterController extends Controller
     private function _saveImageAsFile($image): string | null
     {
         $imageName = $imageNameOriginal = Translit::translit($image->baseName);
+        if(strlen($imageName) > 100) {
+            $imageName = substr($imageName, 0, 100);
+        }
         $imagePath = 'uploads/' . $imageName . '.' . $image->extension;
         // Баг который был на ларавел решен так
         while (file_exists($imagePath)) {
